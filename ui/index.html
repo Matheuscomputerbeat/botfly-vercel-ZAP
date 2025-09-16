@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel WhatsApp Bot - ERP Style</title>
+  <style>
+    :root {
+      --bg-dark: #171e28;
+      --bg-sidebar: #1d2636;
+      --bg-content: #222b3a;
+      --primary: #25d366;
+      --primary-hover: #1ebe5d;
+      --accent: #ff8c00;
+      --accent-hover: #ffac3a;
+      --text: #e5f7ed;
+      --text-muted: #b3c5b9;
+      --scrollbar-bg: #212c3b;
+      --scrollbar-thumb: #25d366;
+      --border: #28344d;
+      --card: #232f41;
+      --card-hover: #27344a;
+      --shadow: 0 4px 24px 0 rgba(8,20,38,0.13);
+      --group-yellow: #ffe066;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      display: flex;
+      height: 100vh;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg-dark);
+      color: var(--text);
+      overflow: hidden;
+    }
+    aside {
+      width: 295px; min-width: 240px; max-width: 320px;
+      background: var(--bg-sidebar);
+      padding: 32px 18px;
+      border-right: 1.5px solid var(--border);
+      box-shadow: 4px 0 16px 0 #0003;
+      display: flex; flex-direction: column;
+      gap: 22px;
+    }
+    aside h2 {
+      font-size: 2.05em;
+      color: var(--primary);
+      font-weight: bold;
+      letter-spacing: 1px;
+      margin-bottom: 38px;
+      text-align: center;
+      text-shadow: 0 2px 8px rgba(38,211,102,0.08);
+    }
+    aside button {
+      background: linear-gradient(90deg, var(--primary) 60%, var(--primary-hover));
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      padding: 13px 0;
+      margin-bottom: 2px;
+      font-size: 1.04em;
+      font-weight: 600;
+      box-shadow: 0 1.5px 8px #0002;
+      cursor: pointer;
+      transition: 
+        background 0.18s, 
+        box-shadow 0.22s, 
+        transform 0.09s;
+      letter-spacing: 0.2px;
+      outline: none;
+    }
+    aside button:hover {
+      background: linear-gradient(90deg, var(--primary-hover) 60%, var(--primary));
+      box-shadow: 0 2.5px 15px #25d36633;
+      transform: scale(1.016);
+    }
+    aside button[style*="background:#ff6600"] {
+      background: linear-gradient(90deg, var(--accent) 67%, var(--accent-hover));
+      color: #fff;
+    }
+    aside button[style*="background:#ff6600"]:hover {
+      background: linear-gradient(90deg, var(--accent-hover) 67%, var(--accent));
+    }
+    main {
+      flex: 1;
+      overflow-y: auto;
+      padding: 40px 42px 32px 42px;
+      background: var(--bg-content);
+      display: flex; flex-direction: column; gap: 22px;
+    }
+    .section {
+      background: var(--card);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      padding: 28px 28px 18px 28px;
+      margin-bottom: 36px;
+      transition: background 0.2s;
+    }
+    .section:hover { background: var(--card-hover); }
+    .section h3 {
+      color: var(--primary);
+      margin-bottom: 18px;
+      font-size: 1.23em;
+      border-bottom: 1.5px solid var(--border);
+      padding-bottom: 8px;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+      text-shadow: 0 1.5px 7px rgba(38,211,102,0.08);
+    }
+    textarea,
+    input[type="time"],
+    input[type="text"],
+    input[type="file"] {
+      width: 100%;
+      padding: 13px 12px;
+      background: #25344a;
+      border: 1.2px solid var(--border);
+      color: var(--text);
+      border-radius: 7px;
+      font-size: 1.03em;
+      margin-top: 6px;
+      margin-bottom: 10px;
+      outline: none;
+      transition: border 0.19s, background 0.18s;
+    }
+    textarea:focus,
+    input[type="time"]:focus,
+    input[type="text"]:focus {
+      background: #223146;
+      border-color: var(--primary);
+    }
+    input[type="file"] {
+      background: transparent;
+      padding-left: 0;
+      color: var(--text-muted);
+      border: none;
+      margin-top: 8px;
+      margin-bottom: 0;
+    }
+    .enviarProdutoAfiliado {
+      background: linear-gradient(90deg, var(--accent) 26%, var(--primary) 84%);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 13px 20px;
+      font-size: 1em;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+      box-shadow: 0 2px 10px #0002;
+      transition: background 0.2s, transform 0.16s;
+    }
+    .enviarProdutoAfiliado:hover {
+      background: linear-gradient(90deg, var(--primary) 26%, var(--accent) 84%);
+      transform: scale(1.02);
+      box-shadow: 0 4px 17px #25d36633;
+    }
+    .checkbox-group {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(215px, 1fr));
+      gap: 18px 14px;
+      padding: 12px 0;
+      border-radius: 17px;
+      background: rgba(38, 211, 102, 0.06);
+      box-shadow: 0 4px 20px 0 rgba(38,211,102,0.08);
+      transition: background 0.2s;
+      margin-top: 10px;
+    }
+    .checkbox-group label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: linear-gradient(90deg, #25344a 16%, #28483b 84%);
+      border-radius: 12px;
+      padding: 14px 18px;
+      font-size: 1.09em;
+      color: #fff;
+      font-weight: 600;
+      box-shadow: 0 2px 10px 0 rgba(38,211,102,0.13);
+      cursor: pointer;
+      user-select: none;
+      border: 2px solid transparent;
+      outline: none;
+      position: relative;
+      min-width: 0;
+      transition: box-shadow 0.15s, background 0.23s, transform 0.12s, border-color 0.18s;
+    }
+    .checkbox-group label::before {
+      content: '👥';
+      font-size: 1.09em;
+      margin-right: 8px;
+      opacity: 0.4;
+      transition: opacity 0.2s, font-size 0.23s;
+    }
+    .checkbox-group input[type="checkbox"] {
+      appearance: none;
+      width: 1.25em;
+      height: 1.25em;
+      border: 2px solid #fff;
+      border-radius: 6px;
+      background: #fff2;
+      margin: 0;
+      transition: border-color 0.2s, background 0.22s;
+      position: relative;
+      cursor: pointer;
+      outline: none;
+    }
+    .checkbox-group input[type="checkbox"]:checked {
+      background: #fff;
+      border-color: #107f4a;
+    }
+    .checkbox-group input[type="checkbox"]:checked::before {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 0.32em;
+      top: 0.15em;
+      width: 0.5em;
+      height: 0.85em;
+      border: solid #1ebe5d;
+      border-width: 0 0.22em 0.22em 0;
+      transform: rotate(42deg);
+      border-radius: 2px;
+    }
+    .checkbox-group input[type="checkbox"]:checked ~ .group-label-text,
+    .checkbox-group label:has(input[type="checkbox"]:checked),
+    .checkbox-group input[type="checkbox"]:focus-visible ~ .group-label-text,
+    .checkbox-group label:focus-within {
+      border: 2.5px solid var(--group-yellow) !important;
+      box-shadow: 0 0 0 4px #ffe06644;
+      animation: blink-yellow 0.17s;
+    }
+    @keyframes blink-yellow {
+      0%   { box-shadow: 0 0 0 0 #ffe066aa; }
+      60%  { box-shadow: 0 0 0 8px #ffe06666; }
+      100% { box-shadow: 0 0 0 4px #ffe06644; }
+    }
+    .checkbox-group label:has(input[type="checkbox"]:checked)::before {
+      content: '✔️';
+      opacity: 1;
+      font-size: 1.16em;
+      filter: drop-shadow(0 1px 0 #fff6);
+      animation: pop-emoji 0.2s;
+    }
+    @keyframes pop-emoji {
+      0% { transform: scale(0.7); }
+      70% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+    .checkbox-group label:hover:has(input[type="checkbox"]:checked) {
+      border-color: #ffd600;
+      box-shadow: 0 0 0 7px #ffe06666;
+    }
+    #log {
+      background: #232f41;
+      padding: 16px;
+      height: 200px;
+      overflow-y: auto;
+      border-radius: 8px;
+      font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
+      font-size: 0.99em;
+      color: #bafcd2;
+      box-shadow: inset 0 0 14px rgba(0,0,0,0.28);
+      margin-top: 12px;
+    }
+    #qrCode {
+      margin-top: 22px;
+      text-align: center;
+      background: var(--card-hover);
+      padding: 16px 0;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px #0001;
+    }
+    ::-webkit-scrollbar { width: 10px; }
+    ::-webkit-scrollbar-track { background: var(--scrollbar-bg); }
+    ::-webkit-scrollbar-thumb {
+      background-color: var(--scrollbar-thumb);
+      border-radius: 6px;
+    }
+    /* Responsivo */
+    @media(max-width: 900px) {
+      main { padding: 18px 4vw; }
+      aside { min-width: 150px; padding: 24px 6px; }
+      .section { padding: 16px 8px 8px 8px; }
+    }
+    @media (max-width: 600px) {
+      body { flex-direction: column; }
+      aside { width: 100%; flex-direction: row; gap: 10px; align-items: center; justify-content: space-between; border-right: none; border-bottom: 2px solid var(--border);}
+      main { padding: 10px 2vw; }
+    }
+    /* Corrige botão bobinho */
+    .enviarProdutoAfiliado[style*="background:#ff6600"] {
+      background: linear-gradient(90deg, var(--accent) 40%, var(--primary) 99%);
+      font-size: 1.01em;
+      font-weight: 600;
+    }
+    .enviarProdutoAfiliado[style*="background:#ff6600"]:hover {
+      background: linear-gradient(90deg, var(--primary) 40%, var(--accent) 99%);
+    }
+    /* Botão menos bobinho */
+    .enviarProdutoAfiliado[style*="background:#ff6600"]:nth-of-type(1) { }
+    .enviarProdutoAfiliado[style*="background:#ff6600"]:nth-of-type(2) {
+      /* Ícone diferente para "Colar Imagens" */
+      font-size: 1.01em;
+    }
+    .enviarProdutoAfiliado[style*="background:#ff6600"]:nth-of-type(3) {
+      /* Visualizar Imagens */
+      font-size: 1em;
+    }
+    /* Inputs animados */
+    textarea, input[type="text"], input[type="time"] {
+      box-shadow: 0 1.5px 7px #0001;
+    }
+    textarea:focus, input[type="text"]:focus, input[type="time"]:focus {
+      box-shadow: 0 2.5px 17px #25d36622;
+    }
+  </style>
+</head>
+<body>
+  <aside>
+    <h2>WhatsApp Bot</h2>
+    <button onclick="startBot()">Iniciar Bot</button>
+    <button onclick="stopBot()">Parar Bot</button>
+    <button onclick="sendMessage()">Enviar Mensagem</button>
+    <button onclick="saveMessage()">Salvar Mensagem</button>
+    <button onclick="saveSchedule()">Agendar Envio</button>
+    <button onclick="saveGroups()">Salvar Grupos</button>
+    <button onclick="enviarMidiaComMensagem()">Enviar Mídia VIP</button>
+    <button onclick="enviarPromocoes()">Enviar Promoções</button>
+  </aside>
+  <main>
+    <div class="section">
+      <h3>Mensagem Padrão</h3>
+      <textarea id="msgBox" rows="4" placeholder="Digite a mensagem que será enviada"></textarea>
+    </div>
+
+    <div class="section">
+      <h3>Produto Único (Link Afiliado)</h3>
+      <input type="text" id="linkProdutoUnico" placeholder="Cole o link de afiliado do produto">
+      <button onclick="window.open(document.getElementById('linkProdutoUnico').value)" class="enviarProdutoAfiliado" style="background:#ff6600;">Abrir Produto</button>
+      <button onclick="mostrarCampoImagens()" class="enviarProdutoAfiliado" style="background:#ff6600;">Colar Imagens Shopee</button>
+      <div id="campoImagens" style="display:none; margin-top:12px">
+        <textarea id="imagensShopee" rows="3" style="width:100%" placeholder="Cole aqui os links das imagens do produto, um por linha"></textarea>
+        <button onclick="mostrarImagensShopee()" class="enviarProdutoAfiliado" style="margin-top:8px;background:#ff6600;">Visualizar Imagens</button>
+        <div id="imagensProdutoShopee" style="margin-top:10px; display:flex; flex-wrap:wrap; gap:8px"></div>
+      </div>
+      <h3 style="margin-top:32px;">Grupos</h3>
+      <div class="checkbox-group" id="groupCheckboxes"></div>
+    </div>
+    <div class="section">
+      <h3>Mídia VIP</h3>
+      <input type="file" id="vipMediaFile" accept="image/*,video/*">
+    </div>
+    <div class="section">
+      <h3>QR Code</h3>
+      <div id="qrCode"></div>
+    </div>
+    <div class="section">
+      <h3>Log</h3>
+      <div id="log"></div>
+    </div>
+  </main>
+   <script>
+    const { ipcRenderer } = require('electron');
+    const QRCode = require('qrcode');
+
+    function log(msg) {
+      const logBox = document.getElementById("log");
+      logBox.innerHTML += `<div>> ${msg}</div>`;
+      logBox.scrollTop = logBox.scrollHeight;
+    }
+
+    function startBot() {
+      ipcRenderer.send("start-bot");
+      log("🟢 Bot iniciado");
+    }
+
+    function stopBot() {
+      ipcRenderer.send("stop-bot");
+      log("🔴 Bot desligado");
+    }
+
+    function sendMessage() {
+      ipcRenderer.send("send-message");
+      log("✉️ Enviando mensagem...");
+    }
+
+    function saveMessage() {
+      const msg = document.getElementById("msgBox").value;
+      localStorage.setItem("mensagemBot", msg);
+      ipcRenderer.send("save-message", msg);
+      log("✅ Mensagem salva.");
+    }
+
+    function enviarMidiaComMensagem() {
+      const fileInput = document.getElementById("vipMediaFile");
+      const file = fileInput.files[0];
+      if (!file) {
+        log("⚠️ Nenhum arquivo selecionado.");
+        return;
+      }
+      const filePath = file.path || fileInput.value;
+      ipcRenderer.send("enviar-midia-vip");
+    }
+
+    function saveSchedule() {
+      const time = document.getElementById("sendTime").value;
+      ipcRenderer.send("save-schedule", time);
+      log("🕐 Horário agendado: " + time);
+    }
+
+    function saveGroups() {
+      const checkboxes = document.querySelectorAll('#groupCheckboxes input[type=checkbox]');
+      const selected = Array.from(checkboxes).filter(c => c.checked).map(c => c.value);
+      ipcRenderer.send("save-groups", selected);
+      log("👥 Grupos salvos.");
+    }
+
+    function enviarMidia() {
+      ipcRenderer.send('enviar-midia-vip');
+      log("📤 Enviando mídia...");
+    }
+
+    function enviarPromocoes() {
+      const link = document.getElementById('linkAfiliado').value;
+      if (!link) return;
+      ipcRenderer.send('enviar-produtos-vip', link);
+      log("🛒 Buscando promoções e enviando...");
+    }
+
+    ipcRenderer.on("qr-code", async (e, qr) => {
+      const container = document.getElementById("qrCode");
+      container.innerHTML = '';
+      const canvas = document.createElement("canvas");
+      await QRCode.toCanvas(canvas, qr);
+      container.appendChild(canvas);
+    });
+
+    ipcRenderer.on("log", (e, msg) => log(msg));
+
+    ipcRenderer.on("group-list", (e, list) => {
+      const container = document.getElementById("groupCheckboxes");
+      container.innerHTML = "";
+      list.forEach(g => {
+        const label = document.createElement("label");
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.value = g.id;
+        // Adiciona para o efeito CSS correto:
+        label.appendChild(checkbox);
+
+        // Cria um span para o nome do grupo (para texto destacado)
+        const span = document.createElement("span");
+        span.className = "group-label-text";
+        span.textContent = ` ${g.name}`;
+        label.appendChild(span);
+
+        container.appendChild(label);
+      });
+    });
+
+    window.onload = () => {
+      const fs = require('fs');
+      try {
+        const savedTime = fs.readFileSync('./data/schedule.txt', 'utf-8').trim();
+        if (savedTime) document.getElementById("sendTime").value = savedTime;
+      } catch (err) {}
+      const msg = localStorage.getItem("mensagemBot");
+      if (msg) document.getElementById("msgBox").value = msg;
+      ipcRenderer.send("request-groups");
+    }
+
+    function enviarProdutoUnico() {
+      const link = document.getElementById('linkProdutoUnico').value.trim();
+      if (!link) {
+        log("⚠️ Cole o link do produto afiliado.");
+        return;
+      }
+      ipcRenderer.send('enviar-produto-unico', link);
+      log("📦 Enviando produto único...");
+    }
+  </script>
+</body>
+</html>

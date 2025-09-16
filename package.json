@@ -1,0 +1,56 @@
+{
+  "name": "whatsapp-bot",
+  "version": "1.0.0",
+  "description": "Botzapp Envio Automático de Mensagens para Whatsapp",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder"
+  },
+  "dependencies": {
+    "axios": "^1.11.0",
+    "cheerio": "^1.1.0",
+    "node-schedule": "^2.1.1",
+    "puppeteer-core": "^24.15.0",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
+    "qrcode": "^1.5.4",
+    "qrcode-terminal": "^0.12.0",
+    "whatsapp-web.js": "^1.31.0"
+  },
+  "devDependencies": {
+    "electron": "^37.2.5",
+    "electron-builder": "^24.9.1"
+  },
+  "build": {
+    "appId": "com.mrsistemas.botzapp",
+    "productName": "WhatsApp Bot",
+    "directories": {
+      "buildResources": "assets"
+    },
+    "files": [
+      "main.js",
+      "bot.js",
+      "package.json",
+      "ui/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "data",
+        "to": "data"
+      }
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "ui/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "WhatsApp Bot"
+    }
+  }
+}
